@@ -11,10 +11,7 @@ export default class OffersTable extends React.Component {
     static propTypes = {
         offers: PropTypes.array.isRequired, // this is passed from the Rails view
         updateHandler: PropTypes.func.isRequired,
-    }
-
-    createOffer = (offer) => {
-        console.log({ offer })
+        removeHandler: PropTypes.func.isRequired,
     }
 
     updateTableData = (key, id) => {
@@ -24,7 +21,7 @@ export default class OffersTable extends React.Component {
     removeRow = (id) => {
         return () => {
             if (confirm('Are you sure remove this row?')) {
-                console.log(`removig ${id}`)
+                this.props.removeHandler(id)
             };
         }
     }
@@ -41,14 +38,14 @@ export default class OffersTable extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {this.props.offers.map(({ id, name, advertiser, payout }, idx) => {
+                {this.props.offers.map(({ id, name, advertiser, payout }) => {
                     return(<tr key={uniqueId()}>
                         <td>{id}</td>
-                        <EditableCell value={name} updateHandler={this.updateTableData('name', idx)} />
-                        <EditableCell value={advertiser} updateHandler={this.updateTableData('advertiser', idx)} />
-                        <EditableCell value={payout} updateHandler={this.updateTableData('payout', idx)} />
+                        <EditableCell value={name} updateHandler={this.updateTableData('name', id)} />
+                        <EditableCell value={advertiser} updateHandler={this.updateTableData('advertiser', id)} />
+                        <EditableCell value={payout} updateHandler={this.updateTableData('payout', id)} />
                         <td>
-                            <Button color="danger" size="sm" onClick={this.removeRow(idx)}><FontAwesomeIcon icon={faTrash} /></Button>
+                            <Button color="danger" size="sm" onClick={this.removeRow(id)}><FontAwesomeIcon icon={faTrash} /></Button>
                         </td>
                     </tr>)
                 })}

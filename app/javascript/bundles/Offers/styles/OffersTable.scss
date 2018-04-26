@@ -14,3 +14,17 @@
    margin: 2px;
   }
 }
+
+$primary-color: #007bff;
+@import '~loaders.css/src/animations/ball-rotate.scss';
+.loader-wrapper {
+  position: absolute;
+  left: 45%;
+  top: 50%;
+  .loader-hidden {
+    display: none;
+  }
+  .loader-active {
+    display: block;
+  }
+}

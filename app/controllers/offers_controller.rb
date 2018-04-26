@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
 class OffersController < ApplicationController
-  layout "offers"
+  layout 'offers'
+  before_action :set_offer, only: [:update, :destroy]
 
   def index
-    @component_props = { offers: Offer.order(created_at: :desc).all }
+    @offers = Offer.order(created_at: :desc).all
+    @component_props = { offers: @offers }
+    respond_to do |format|
+      format.html
+      format.json { render :json => @offers }
+    end
   end
 
   def create
@@ -23,7 +29,7 @@ class OffersController < ApplicationController
 
   private
 
-  def setup_offer
+  def set_offer
     @offer = Offer.find(params[:id])
   end
 
