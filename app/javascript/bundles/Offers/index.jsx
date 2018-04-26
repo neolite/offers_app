@@ -1,44 +1,53 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactOnRails from 'react-on-rails';
+import axios from 'axios';
+import { Button } from 'reactstrap';
+import OffersTable from './components/OffersTable';
+import AddOfferForm from './components/AddOffer';
 
 export default class App extends React.Component {
     static propTypes = {
-        name: PropTypes.string.isRequired, // this is passed from the Rails view
+        offers: PropTypes.array.isRequired,
     };
 
-    /**
-     * @param props - Comes from your rails view.
-     */
     constructor(props) {
         super(props);
-
-        // How to set initial state in ES6 class syntax
-        // https://reactjs.org/docs/state-and-lifecycle.html#adding-local-state-to-a-class
-        this.state = { name: this.props.name };
+        this.state = { offers: this.props.offers, addOffer: false };
+        const header = ReactOnRails.authenticityHeaders('X-CSRF-Token');
+        const csrfToken = ReactOnRails.authenticityToken();
+        console.log({ csrfToken , header })
+        axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
+        this.rest = axios.create({
+            timeout: 10000,
+        });
     }
 
-    updateName = (name) => {
-        this.setState({ name });
-    };
+    createOffer = (offer) => {
+        console.log({ offer });
+        this.rest.post('/offers', {
+            offer
+        }).then(() => {
+            console.log('saved data');
+            this.toggleAddOfferForm()
+        })
+    }
+    updateHandler = (val) => {
+        console.log(val)
+    }
+
+    toggleAddOfferForm = () => {
+        this.setState({ addOffer: !this.state.addOffer })
+    }
 
     render() {
         return (
             <div>
-                <h3>
-                    Hello, {this.state.name}!
-                </h3>
-                <hr />
-                <form >
-                    <label htmlFor="name">
-                        Say hello to:
-                    </label>
-                    <input
-                        id="name"
-                        type="text"
-                        value={this.state.name}
-                        onChange={(e) => this.updateName(e.target.value)}
-                    />
-                </form>
+                <div className="add-offer">
+                    { this.state.addOffer ? <AddOfferForm createHandler={this.createOffer} cancelHandler={this.toggleAddOfferForm}/>
+                    : <Button onClick={this.toggleAddOfferForm} color='primary'>New offer</Button>}
+                </div>
+                <OffersTable offers={this.state.offers} updateHandler={this.updateHandler}/>
             </div>
         );
     }

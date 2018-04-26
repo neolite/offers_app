@@ -1,0 +1,16 @@
+.add-offer {
+  margin: 12px;
+}
+
+.offers-table {
+  table-layout: fixed;
+  & th:nth-child(1) {
+    width: 40px;
+  }
+  & th, td {
+    min-width: 120px;
+  }
+  & input, button {
+   margin: 2px;
+  }
+}
