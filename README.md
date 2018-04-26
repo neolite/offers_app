@@ -1,24 +1,10 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Offers CRUD app.
 
-Things you may want to cover:
+Used Ruby on Rails & React
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### SETUP
+* Clone repository
+* bundle install & yarn
+* bundle exec rails s
